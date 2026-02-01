@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Sueldo Salvadoreño</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        
+        .calculator-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-section {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .results-section {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .currency-symbol {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px 14px 14px 35px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        
+        .calculate-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        
+        .calculate-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .results {
+            margin-top: 20px;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px 0;
+            border-bottom: 1px solid #eaeaea;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .result-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .total-item {
+            background-color: #ecf0f1;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .deduction-details {
+            margin-top: 25px;
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .deduction-details h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .deduction-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .deduction-percentage {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .info-note {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: #8a6d3b;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .info-note h4 {
+            margin-bottom: 8px;
+            color: #8a6d3b;
+        }
+        
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid #eaeaea;
+        }
+        
+        .highlight {
+            color: #e74c3c;
+        }
+        
+        .positive {
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Calculadora de Sueldo Salvadoreño</h1>
+            <p class="subtitle">Ingresa tu sueldo mensual para calcular los descuentos de ISSS, AFP, Renta y obtener tu sueldo liquido.</p>
+        </header>
+        
+        <div class="calculator-container">
+            <div class="input-section">
+                <div class="form-group">
+                    <label for="salary">Ingresa tu Sueldo Mensual ($)</label>
+                    <div class="input-wrapper">
+                        <span class="currency-symbol">$</span>
+                        <input type="number" id="salary" placeholder="Ingresa la cantidad" min="0" step="0.01">
+                    </div>
+                </div>
+                
+                <button class="calculate-btn" id="calculateBtn">Calcular Descuentos</button>
+                
+                <div class="info-note">
+                    <h4>Nota sobre las tasas de descuento:</h4>
+                    <p>• ISSS: 3% del sueldo, (Máximo $30.00)</p>
+                    <p>• AFP: 7.25% del sueldo</p>
+                    <p>• Renta: Calculada según tabla progresiva de impuestos sobre la renta</p>
+                </div>
+            </div>
+            
+            <div class="results-section">
+                <h2>Resultados del Cálculo</h2>
+                <div class="results" id="results">
+                    <div class="result-item">
+                        <span class="result-label">Sueldo Mensual</span>
+                        <span class="result-value" id="grossSalary">$0.00</span>
+                    </div>
+                    
+                    <div class="deduction-details">
+                        <h3>Descuentos Aplicados</h3>
+                        <div class="deduction-item">
+                            <span>Descuento ISSS (3%)</span>
+                            <span class="highlight" id="isssAmount">$0.00</span>
+                        </div>
+                        <div class="deduction-item">
+                            <span>Descuento AFP (7.25%)</span>
+                            <span class="highlight" id="afpAmount">$0.00</span>
+                        </div>
+                        <div class="deduction-item">
+                            <span>ISR Retenido</span>
+                            <span class="highlight" id="rentaAmount">$0.00</span>
+                        </div>
+                        <div class="deduction-item">
+                            <span>Total Descuentos</span>
+                            <span class="highlight" id="totalDeductions">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="total-item">
+                        <span>Sueldo Neto</span>
+                        <span class="positive" id="netSalary">$0.00</span>
+                    </div>
+                </div>
+                
+                <div class="info-note">
+                    <h4>¿Cómo se calcula la renta?</h4>
+                    <p>La tabla de renta aplica de forma progresiva:</p>
+                    <p>• Hasta $550.00: Exento</p>
+                    <p>• De $550.01 a $895.24 * 10% + $17.67 sobre el excedente</p>
+                    <p>• De $895.25 a $2,038.10 * 20% + $60.00 sobre el excedente</p>
+                    <p>• Más de $2,038.10 * 30% + $288.57 sobre el excedente</p>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Esta calculadora es una herramienta informativa. Creada por un Estudiante de La Univesidada Gerarndo Barrios.</p>
+            <p>© 2026 MIGUEL ANTONIO HERRERA CHAVEZ</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const salaryInput = document.getElementById('salary');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const grossSalaryElement = document.getElementById('grossSalary');
+            const isssAmountElement = document.getElementById('isssAmount');
+            const afpAmountElement = document.getElementById('afpAmount');
+            const rentaAmountElement = document.getElementById('rentaAmount');
+            const totalDeductionsElement = document.getElementById('totalDeductions');
+            const netSalaryElement = document.getElementById('netSalary');
+            
+            // Función para formatear números como moneda
+            function formatCurrency(amount) {
+                return '$' + amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            }
+            
+            // Función para calcular ISSS (3% con máximo de $30)
+            function calculateISSS(salary) {
+                   const isss = salary * 0.03;
+                return Math.min(isss, 30.00);
+               
+            }
+            
+            // Función para calcular AFP (7.25%)
+           function calculateAFP(salary) {
+             if (typeof salary !== "number" || salary < 0) return 0;
+             return salary * 0.0725;
+            }
+
+            
+            // Función para calcular renta según tabla progresiva
+            function calculateRenta(salary) {
+                // Restamos ISSS y AFP antes de calcular renta
+                const isss = calculateISSS(salary);
+                const afp = calculateAFP(salary);
+                const baseForRenta = salary - isss - afp;
+                
+                let renta = 0;
+                
+                if (baseForRenta <= 550.00) {
+                    renta = 0;
+                } else if (baseForRenta <= 895.24) {
+                    renta = (baseForRenta - 550.00) * 0.10 + 17.67;
+                    ;
+                } else if (baseForRenta <= 2038.10) {
+                    renta = 60.00 + (baseForRenta - 895.24) * 0.20 ;
+                } else {
+                    renta = 288.57 + (baseForRenta - 2038.10) * 0.30 ;
+                }
+                
+                return Math.max(0, renta);
+            }
+            
+            // Función principal de cálculo
+            function calculateSalary() {
+                const salary = parseFloat(salaryInput.value) || 0;
+                
+                // Validar que el salario sea positivo
+                if (salary <= 0) {
+                    alert("Por favor, ingresa una cantidad válida mayor a cero.");
+                    salaryInput.focus();
+                    return;
+                }
+                
+                // Calcular descuentos
+                const isss = calculateISSS(salary);
+                const afp = calculateAFP(salary);
+                const renta = calculateRenta(salary);
+                
+                // Calcular total descuentos y sueldo neto
+                const totalDeductions = isss + afp + renta;
+                const netSalary = salary - totalDeductions;
+                
+                // Mostrar resultados
+                grossSalaryElement.textContent = formatCurrency(salary);
+                isssAmountElement.textContent = formatCurrency(isss);
+                afpAmountElement.textContent = formatCurrency(afp);
+                rentaAmountElement.textContent = formatCurrency(renta);
+                totalDeductionsElement.textContent = formatCurrency(totalDeductions);
+                netSalaryElement.textContent = formatCurrency(netSalary);
+            }
+            
+            // Evento al hacer clic en el botón calcular
+            calculateBtn.addEventListener('click', calculateSalary);
+            
+            // Evento al presionar Enter en el campo de salario
+            salaryInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculateSalary();
+                }
+            });
+            
+          
+        });
+    </script>
+</body>
+</html>
